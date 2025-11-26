@@ -14,8 +14,16 @@ import os
 import string
 from functools import lru_cache
 from typing import List, Optional, Union
+try:
+    import ftfy
+except ImportError:
+    print("ftfy package not found, mocking it with a null operation!")
+    class MockFtfy:
+        @staticmethod
+        def fix_text(text):
+            return text # Return text as-is without cleaning
+    ftfy = MockFtfy()
 
-import ftfy
 import regex as re
 import torch
 from iopath.common.file_io import g_pathmgr
