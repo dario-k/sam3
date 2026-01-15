@@ -3,13 +3,16 @@
 """Triton kernel for euclidean distance transform (EDT)"""
 
 import torch
+import logging
+logger = logging.getLogger(__name__)
+
 try:
     import triton
     import triton.language as tl
     TRITON_AVAILABLE = True
 except:
     TRITON_AVAILABLE = False
-    print("Triton not available using fallback!")
+    logger.warning("Triton not available using fallback!")
 
 if not TRITON_AVAILABLE:
     import torch.nn.functional as F
@@ -187,20 +190,15 @@ else:
         Fallback implementation of Euclidean Distance Transform for Mac (MPS/CPU).
         Uses scipy.ndimage.distance_transform_edt.
         """
-        # x is likely a boolean or binary mask tensor.
-        # We need to move it to CPU to use Scipy.
         original_device = x.device
         original_dtype = x.dtype
 
-        # Convert to numpy boolean array
+        # convert to numpy boolean array and move to cpu to use scipy
         x_np = x.detach().cpu().numpy().astype(bool)
 
-        # Scipy calculates distance to the closest BACKGROUND pixel (0).
-        # If the logic in SAM3 expects distance to FOREGROUND, you might need to invert x_np.
-        # Assuming standard EDT usage (distance to nearest zero):
         dist_np = distance_transform_edt(x_np)
 
-        # Convert back to Tensor and move to original device
+        # convert back
         dist_tensor = torch.from_numpy(dist_np).to(original_device)
 
         return dist_tensor.to(original_dtype)
