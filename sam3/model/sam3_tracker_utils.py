@@ -13,7 +13,6 @@ try:
     TRITON_AVAILABLE = True
 except ImportError:
     TRITON_AVAILABLE = False
-    logger.warning("Triton not available using fallback!")
 
 
 def sample_box_points(
@@ -273,6 +272,7 @@ def get_next_point(gt_masks, pred_masks, method):
         if TRITON_AVAILABLE:
             return sample_one_point_from_error_center(gt_masks, pred_masks)
         else:
+            logger.warning("Triton not available using fallback!")
             return sample_one_point_from_error_center_slow(gt_masks, pred_masks)
     else:
         raise ValueError(f"unknown sampling method {method}")
