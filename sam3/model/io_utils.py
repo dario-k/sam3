@@ -1,5 +1,5 @@
 # Copyright (c) Meta Platforms, Inc. and affiliates. All Rights Reserved
-
+import logging
 import contextlib
 import os
 import queue
@@ -14,10 +14,10 @@ import torchvision.transforms.functional as TF
 
 from PIL import Image
 
-from sam3.logger import get_logger
 from tqdm import tqdm
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
+
 
 IS_MAIN_PROCESS = os.getenv("IS_MAIN_PROCESS", "1") == "1"
 RANK = int(os.getenv("RANK", "0"))
