@@ -1,5 +1,6 @@
 # Copyright (c) Meta Platforms, Inc. and affiliates. All Rights Reserved
 
+import logging
 import datetime
 import gc
 import multiprocessing as mp
@@ -15,10 +16,7 @@ from typing import List, Optional
 import psutil
 import torch
 
-from sam3.logger import get_logger
-
-logger = get_logger(__name__)
-
+logger = logging.getLogger(__name__)
 
 class Sam3VideoPredictor:
     # a global dictionary that holds all inference states for this model (key is session_id)

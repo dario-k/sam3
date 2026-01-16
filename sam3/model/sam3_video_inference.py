@@ -9,7 +9,6 @@ import torch.distributed as dist
 import torch.nn.functional as F
 
 from sam3 import perflib
-from sam3.logger import get_logger
 from sam3.model.act_ckpt_utils import clone_output_wrapper
 from sam3.model.box_ops import box_xywh_to_cxcywh, box_xyxy_to_xywh
 from sam3.model.data_misc import BatchedDatapoint, convert_my_tensors, FindStage
@@ -23,7 +22,7 @@ from sam3.perflib.masks_ops import masks_to_boxes as perf_masks_to_boxes
 from torchvision.ops import masks_to_boxes
 from tqdm.auto import tqdm
 
-logger = get_logger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class Sam3VideoInference(Sam3VideoBase):
