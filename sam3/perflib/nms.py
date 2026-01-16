@@ -7,13 +7,14 @@ import torch
 
 from sam3.perflib.masks_ops import mask_iou
 
+logger = logging.getLogger(__name__)
 
 try:
     from torch_generic_nms import generic_nms as generic_nms_cuda
 
     GENERIC_NMS_AVAILABLE = True
 except ImportError:
-    logging.debug(
+    logger.debug(
         "Falling back to triton or CPU mask NMS implementation -- please install `torch_generic_nms` via\n\t"
         'pip uninstall -y torch_generic_nms; TORCH_CUDA_ARCH_LIST="8.0 9.0" pip install git+https://github.com/ronghanghu/torch_generic_nms'
     )
